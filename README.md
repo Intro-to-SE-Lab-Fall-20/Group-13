@@ -20,3 +20,6 @@ Install VSCode on the <a href="https://code.visualstudio.com/">Visual Studio Cod
 </p>
 
 </ul>
+
+
+<p>docker build -t seflask:latest .</p>
