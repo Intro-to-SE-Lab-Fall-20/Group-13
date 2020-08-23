@@ -6,7 +6,7 @@
 
 <ul>
 <li>Github</li>
-<li>Docker<li>
+<li>Docker</li>
 <li>VSCode</li>
 </ul>
 
