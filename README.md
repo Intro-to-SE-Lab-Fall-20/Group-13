@@ -12,7 +12,11 @@ Try out <a href="https://lab.github.com/">Github learning lab</a>
 <a href="https://desktop.github.com/">Install GitHub Desktop</a>
 </p>
 <li>Docker</li>
-Install Docker desktop using the link on <a href="https://www.docker.com/products/docker-desktop">Docker Desktop</a> page.
-
+<p>Install Docker desktop using the link on <a href="https://www.docker.com/products/docker-desktop">Docker Desktop</a> page.
+</p>
 <li>VSCode</li>
+<p>
+Install VSCode on the <a href="https://code.visualstudio.com/">Visual Studio Code</a> page.
+</p>
+
 </ul>
