@@ -26,7 +26,12 @@ Install VSCode on the <a href="https://code.visualstudio.com/">Visual Studio Cod
 
 <p>docker image ls</p>
 
-<p>docker run -it seflask</p>
+<h3>This command will run the docker contaier and launch the webserver. It ties port back to port 5000 on local machine. May require allow access from windows.</h3>
 
+<p>docker run -it -p 5000:5000 seflask</p>
+
+visit browser and type:
+
+<p>localhost:5000</p>
 
 #Add Line
