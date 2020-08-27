@@ -37,13 +37,19 @@ visit browser and type:
 <h2>Our Team</h2>
 
 <h3>Trey O’Neal</h3>
+<h4>github user : <a href="https://github.com/trekkertrey">trekkertrey</a></h4>
 <p>Trey O’Neal is a junior software engineer on the team at Mississippi State.</p>
 
+
 <h3>William Giddens</h3>
+<h4>github user : <a href="https://github.com/WilliamGiddens">WilliamGiddens</a></h4>
 <p>William Giddens is a junior software engineer on the team at Mississippi State.</p>
 
 <h3>Joe Howard</h3>
+<h4>github user : <a href="https://github.com/Jhowardmsstate">Jhowardmsstate</a></h4>
 <p>Joe Howard is a graduate student in the Computational Engineering doctorate program at Mississippi State. Joe has many years of experience in enterprise security.</p>
 
 <h3>Chad Whitney</h3>
+<h4>github user : <a href="https://github.com/cwgu">cwgu</a></h4>
+
 <p>Chad Whitney is a graduate student in the computer science program at Mississippi State. Chad has many years of experience in project management and software development.</p>
