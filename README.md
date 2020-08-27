@@ -34,4 +34,16 @@ visit browser and type:
 
 <p>localhost:5000</p>
 
-#Add Line
+<h2>Our Team</h2>
+
+<h3>Trey O’Neal</h3>
+<p>Trey O’Neal is a junior software engineer on the team at Mississippi State.</p>
+
+<h3>William Giddens</h3>
+<p>William Giddens is a junior software engineer on the team at Mississippi State.</p>
+
+<h3>Joe Howard</h3>
+<p>Joe Howard is a graduate student in the Computational Engineering doctorate program at Mississippi State. Joe has many years of experience in enterprise security.</p>
+
+<h3>Chad Whitney</h3>
+<p>Chad Whitney is a graduate student in the computer science program at Mississippi State. Chad has many years of experience in project management and software development.</p>
