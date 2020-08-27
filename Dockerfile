@@ -4,6 +4,8 @@ FROM alpine:latest
 # Runs to add Python3 and Pip3
 RUN apk add --no-cache python3
 RUN apk add cmd:pip3
+RUN apk add --no-cache mariadb mariadb-client mariadb-server-utils pwgen && \
+    rm -f /var/cache/apk/*
 
 #set work directory and copies files from current folder
 WORKDIR /app
