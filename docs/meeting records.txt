@@ -1,0 +1,13 @@
+
+08/23/2020 Met online with Trey, Chad, William and Joe. Assigned responsibilities for project. Built out prototype SRS document waiting for more info. Launched basic Docker container and sicussed technology. Worked through Docker installation issue on user machines
+
+**** From Google Document
+08/21 Met on Friday vi Google Meet - Chad, Joe, William
+Suggested Videos
+Flask App Videos:
+
+Simple Flask App Creation
+https://youtu.be/j2v2r6ByjJI
+
+Moving Flask App To Docker
+https://youtu.be/prlixoDIfrc
