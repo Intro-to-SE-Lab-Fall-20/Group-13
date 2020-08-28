@@ -38,6 +38,18 @@ visit browser and type:
 
 <p>This software is a basic functioning email client.</p>
 
+<h2>Objectives</h2>
+
+<p>Our objective is to design and develop an email client that will have a number of different functionalities based on the TA expectations. The email client will need to perform the following functionalities.</p>
+
+<li>A user should be able to login into his account to access his emails.</li>
+
+<li>A user should be able to compose, edit and send an email to other users.</li>
+
+<li>A user should be able to search and forward emails to other users.</li>
+
+<li>A user should be able to send attachments (image, files etc.) along with an email.</li>
+
 <h2> Project Description</h2>
 <p>This project aims to provide an applicable solution for handling the storage and retrieval of emails. The use of advanced object-oriented techniques will provide a foundation for further developers to create and deploy advanced versions of the tool. The foundation provided by the development of this project will be a step toward creating additional enhancements and features in subsequent releases; with each focusing on one specialized part of the email tool. The scope of the project is to meet the features requested from the user community in the initial project request and allow for two small incremental changes to the software. </p>
 
