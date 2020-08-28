@@ -38,6 +38,12 @@ visit browser and type:
 
 <p>This software is a basic functioning email client.</p>
 
+<h2> Project Description</h2>
+<p>This project aims to provide an applicable solution for handling the storage and retrieval of emails. The use of advanced object-oriented techniques will provide a foundation for further developers to create and deploy advanced versions of the tool. The foundation provided by the development of this project will be a step toward creating additional enhancements and features in subsequent releases; with each focusing on one specialized part of the email tool. The scope of the project is to meet the features requested from the user community in the initial project request and allow for two small incremental changes to the software. </p>
+
+<p>The software product being created will be a web based email platform that will allow users to login and view their emails. Emails can be created and sent with or without attachments. A user will also be able to search email by subject and then forward an email to another email address. </p>
+
+
 <h2>Our Team</h2>
 
 <h3>Trey O’Neal</h3>
