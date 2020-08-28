@@ -36,6 +36,7 @@ visit browser and type:
 
 <h2>Features</h2>
 
+<p>This software is a basic functioning email client.</p>
 
 <h2>Our Team</h2>
 
