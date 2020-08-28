@@ -37,7 +37,10 @@ visit browser and type:
 
 <h2>Features</h2>
 
-<p>This software is a basic functioning email client.</p>
+<p>This software is a basic functioning email client. A finished product should include the capabilities.</p>
+<li>Email username and password login</li>
+<li>Send and recieve emails</li>
+<li>Send and recieve picture attachment</li>
 
 
 <h2>Objectives</h2>
