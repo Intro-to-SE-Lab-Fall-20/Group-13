@@ -34,6 +34,9 @@ visit browser and type:
 
 <p>localhost:5000</p>
 
+<h2>Features</h2>
+
+
 <h2>Our Team</h2>
 
 <h3>Trey O’Neal</h3>
