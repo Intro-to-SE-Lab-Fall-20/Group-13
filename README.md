@@ -79,5 +79,6 @@ visit browser and type:
 
 <h3>Chad Whitney</h3>
 <h4>github user : <a href="https://github.com/cwgu">cwgu</a></h4>
+<h4>github user : <a href="https://github.com/wickedcoastal">wickedcoastal</a></h4>
 
 <p>Chad Whitney is a graduate student in the computer science program at Mississippi State. Chad has many years of experience in project management and software development.</p>
