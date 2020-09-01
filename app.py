@@ -49,7 +49,9 @@ def email():
 @app.route("/email-search/", methods=['GET', 'POST'])
 def emailsearch():
     from nylas import APIClient
-    
+    CLIENT_ID='erta7s4vw61q37aw14wx1f7kv'
+    ACCESS_TOKEN='GD7S4grE0FruLFBm2TiixeyLY3YoGC'
+    CLIENT_SECRET='1coubzlaae6c0irdoyya36qby'
     nylas = APIClient(    CLIENT_ID,
     CLIENT_SECRET,
     ACCESS_TOKEN    
