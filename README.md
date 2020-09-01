@@ -39,8 +39,8 @@ visit browser and type:
 
 <p>This software is a basic functioning email client. A finished product should include the capabilities.</p>
 <li>Email username and password login</li>
-<li>Send and recieve emails</li>
-<li>Send and recieve picture attachment</li>
+<li>Send and recieve emails</li> 
+<li>Send and recieve attachments under 1MB</li>
 
 
 <h2>Objectives</h2>
