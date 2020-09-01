@@ -30,8 +30,10 @@ def default1():
 @app.route("/email/", methods=['GET', 'POST'])
 def email():
     from nylas import APIClient
-    
-    nylas = APIClient(CLIENT_ID,
+    CLIENT_ID='erta7s4vw61q37aw14wx1f7kv'
+    ACCESS_TOKEN='GD7S4grE0FruLFBm2TiixeyLY3YoGC'
+    CLIENT_SECRET='1coubzlaae6c0irdoyya36qby'
+    nylas = APIClient(    CLIENT_ID,
     CLIENT_SECRET,
     ACCESS_TOKEN    
     )
@@ -42,6 +44,25 @@ def email():
 
 
     return render_template("email.html", data=data)
+
+
+@app.route("/email-search/", methods=['GET', 'POST'])
+def emailsearch():
+    from nylas import APIClient
+    
+    nylas = APIClient(    CLIENT_ID,
+    CLIENT_SECRET,
+    ACCESS_TOKEN    
+    )
+
+    data = nylas.messages.search("hit")
+
+
+
+
+    return render_template("email-search.html", data=data)
+
+
          
 
 app.run(debug=True, host ='0.0.0.0')
