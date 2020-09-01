@@ -1,5 +1,5 @@
 #SE Project Email program Willam Giddens, Trey O'neal, Joe Howard, Chad Whitney
-
+import creds
 from flask import Flask, render_template, url_for, flash, redirect
 from forms import LoginForm
 from nylas import APIClient
@@ -31,9 +31,9 @@ def default1():
 def email():
     from nylas import APIClient
   
-    nylas = APIClient(    CLIENT_ID,
-    CLIENT_SECRET,
-    ACCESS_TOKEN    
+    nylas = APIClient(    creds.CLIENT_ID,
+    creds.CLIENT_SECRET,
+    creds.ACCESS_TOKEN    
     )
 
     data = nylas.messages.all()
@@ -47,13 +47,13 @@ def email():
 @app.route("/email-search/", methods=['GET', 'POST'])
 def emailsearch():
     from nylas import APIClient
-
-    nylas = APIClient(    CLIENT_ID,
-    CLIENT_SECRET,
-    ACCESS_TOKEN    
+    
+    nylas = APIClient(    creds.CLIENT_ID,
+    creds.CLIENT_SECRET,
+    creds.ACCESS_TOKEN    
     )
 
-    data = nylas.messages.search("hit")
+    data = nylas.messages.search("chad")
 
 
 
