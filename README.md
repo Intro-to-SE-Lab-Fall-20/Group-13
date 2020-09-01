@@ -34,9 +34,27 @@ visit browser and type:
 
 <p>localhost:5000</p>
 
+
 <h2>Features</h2>
 
-<p>This software is a basic functioning email client.</p>
+<p>This software is a basic functioning email client. A finished product should include the capabilities.</p>
+<li>Email username and password login</li>
+<li>Send and recieve emails</li>
+<li>Send and recieve picture attachment</li>
+
+
+<h2>Objectives</h2>
+
+<p>Our objective is to design and develop an email client that will have a number of different functionalities based on the TA expectations. The email client will need to perform the following functionalities.</p>
+
+<li>A user should be able to login into his account to access his emails.</li>
+
+<li>A user should be able to compose, edit and send an email to other users.</li>
+
+<li>A user should be able to search and forward emails to other users.</li>
+
+<li>A user should be able to send attachments (image, files etc.) along with an email.</li>
+
 
 <h2> Project Description</h2>
 <p>The software will be designed and tested to meet user stories and specifications. The software will be built using the Agile Software Development approach. The timeline for completion of the project shall be one semester. Initial release will be version 1.0 and subsequent releases will follow the standard point release model. This project aims to provide an applicable solution for handling the storage and retrieval of emails. The use of advanced object-oriented techniques will provide a foundation for further developers to create and deploy advanced versions of the tool. The foundation provided by the development of this project will be a step toward creating additional enhancements and features in subsequent releases; with each focusing on one specialized part of the email tool. The scope of the project is to meet the features requested from the user community in the initial project request and allow for two small incremental changes to the software. </p>
