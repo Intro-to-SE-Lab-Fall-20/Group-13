@@ -60,7 +60,21 @@ def emailsearch():
 
     return render_template("email-search.html", data=data)
 
+@app.route("/emails/{id}", methods=['GET', 'POST'])
+def emailsearch():
+    from nylas import APIClient
+  
+    nylas = APIClient(    creds.CLIENT_ID,
+    creds.CLIENT_SECRET,
+    creds.ACCESS_TOKEN    
+    )
 
+    data = nylas.messages.get('{id}')
+
+
+
+
+    return render_template("emails.html", data=data)
          
 
 app.run(debug=True, host ='0.0.0.0')
