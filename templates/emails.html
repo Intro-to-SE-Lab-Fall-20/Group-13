@@ -52,8 +52,15 @@
             <h2>subject: {{ data.subject}}</h2>
             <p>{{ data.snippet}}</p>
 
-            <p>Attachments:                    
-            {{ data.files}}</p>
+            <p>Attachments:     
+                {% if data.files == 'none' %}
+                    none
+                {% else %}
+                    {% for file in data.files %}
+                        <a href ="/download/{{ file.id }}">{{ file.filename }}</a>
+                    {% endfor %}
+            {% endif %}               
+            </p>
             
 
      
