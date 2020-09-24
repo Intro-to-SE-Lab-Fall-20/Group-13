@@ -71,8 +71,7 @@ def emails(id):
 
     data = nylas.messages.get(id)
 
-    print(data)
-
+    
 
     return render_template("emails.html", data=data)
          
