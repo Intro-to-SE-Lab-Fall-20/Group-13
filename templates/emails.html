@@ -18,7 +18,11 @@
     <div class="content-section">
         <div class="list-group">
             <p>date: {{ data.date}}</p>
-            <p>from: {{ data.from_}}</p>
+
+            {% for from in data.from_ %}
+            <p>from: {{ from.name}}</p>
+            {% endfor %}
+            
             <p>to: {{ data.to }}</p>
             <p>cc: </p>
             <p>bcc: </p>
