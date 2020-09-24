@@ -17,21 +17,23 @@
 </div>
     <div class="content-section">
         <div class="list-group">
+            <div class="card">
+                <div class="card-body">
+            <p>date: {{ data.date}}</p>
 
-            <p>date: <input placeholder="{{data.date}}"></p>
-            
             {% for from in data.from_ %}
-            <p>from: <input placeholder="{{ from.name}} ----- {{ from.email }}"></p>
+            <p>from: {{ from.name}} ----- {{ from.email }}</p>
             {% endfor %}
             
             {% for to in data.to %}
-            <p>from: <input placeholder="{{ to.name}} ----- {{ to.email }}"></p>
+            <p>from: {{ to.name}} ----- {{ to.email }}</p>
             {% endfor %}
 
+            <p>to: {{ data.to }}</p>
             <p>cc: </p>
             <p>bcc: </p>
 
-            <h2>subject: <input placeholder="{{ data.subject}}"></h2>
+            <h2>subject: {{ data.subject}}</h2>
             <p>{{ data.snippet}}</p>
 
             <p>Attachments:                    
@@ -41,7 +43,7 @@
      
     </div>
 
-      
+      </div></div>
        
     </div>
 {% endblock content %}
