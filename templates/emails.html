@@ -1,19 +1,36 @@
 {% extends "base.html" %}
 {% block content %}
-<div>
 
+<div class="container">
+    <div class="row">
+      <div class="col-sm">
+<h2><a href="/email/">Return to Inbox</a></h2>
+</div>
+</div>
+
+<div class="row">
+    <div class="col-sm">
     <form class="form-inline">
         <div class="form-group mx-sm-3 mb-2">
           <label for="inputPassword2" class="sr-only">Search emails</label>
           <input type="password" class="form-control" id="inputPassword2" placeholder="Search the email">
         </div>
-        <button type="submit" class="btn btn-primary mb-2">Search</button>
+        
+        <button type="submit" class="btn btn-primary px-2 mb-2">Search</button>
       </form>
+      </div>
+      <div class="col-sm">
+        <button type="button" class="btn btn-primary px-2 mb-2">Compose</button>
+     </div>
+    
+    
+</div>
+
 
 
 </div>
 
-<div><button type="button" class="btn btn-primary">Compose Email</button>
+
 </div>
     <div class="content-section">
         <div class="list-group">
@@ -26,10 +43,9 @@
             {% endfor %}
             
             {% for to in data.to %}
-            <p>from: {{ to.name}} ----- {{ to.email }}</p>
+            <p>to: {{ to.email }}</p>
             {% endfor %}
 
-            <p>to: {{ data.to }}</p>
             <p>cc: </p>
             <p>bcc: </p>
 
