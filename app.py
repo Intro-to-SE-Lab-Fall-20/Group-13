@@ -12,6 +12,8 @@ app.config['SECRET_KEY'] = 'ourseecretkeyz1112'
 def default():
     return render_template('default.html')
 
+## This is the login route
+
 @app.route('/login',methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -23,9 +25,13 @@ def login():
             flash('Login Failed, Please Check Your Credentials and Try Again', 'danger')
     return render_template('default1.html', title='Login', form=form)
 
+## This route shows succesful login
+
 @app.route('/success')
 def default1():
     return render_template('default1.html')   
+
+## This route shows current emails
 
 @app.route("/email/", methods=['GET', 'POST'])
 def email():
@@ -38,11 +44,9 @@ def email():
 
     data = nylas.messages.all()
 
-
-
-
     return render_template("email.html", data=data)
 
+## This route searches emails and returns emails found
 
 @app.route("/email-search/", methods=['GET', 'POST'])
 def emailsearch():
@@ -56,9 +60,9 @@ def emailsearch():
     data = Search()
 
 
-
-
     return render_template("email-search.html", data=data)
+
+## This route shows individual emails
 
 @app.route("/emails/<id>", methods=['GET', 'POST'])
 def emails(id):
@@ -72,6 +76,9 @@ def emails(id):
     data = nylas.messages.get(id)
 
     
+    if not data.files:
+        data.files = "none"
+
 
     return render_template("emails.html", data=data)
          
