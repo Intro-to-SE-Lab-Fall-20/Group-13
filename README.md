@@ -39,8 +39,8 @@ visit browser and type:
 
 <p>This software is a basic functioning email client. A finished product should include the capabilities.</p>
 <li>Email username and password login</li>
-<li>Send and recieve emails</li>
-<li>Send and recieve picture attachment</li>
+<li>Send and recieve emails</li> 
+<li>Send and recieve attachments under 1MB</li>
 
 
 <h2>Objectives</h2>
@@ -57,7 +57,7 @@ visit browser and type:
 
 
 <h2> Project Description</h2>
-<p>This project aims to provide an applicable solution for handling the storage and retrieval of emails. The use of advanced object-oriented techniques will provide a foundation for further developers to create and deploy advanced versions of the tool. The foundation provided by the development of this project will be a step toward creating additional enhancements and features in subsequent releases; with each focusing on one specialized part of the email tool. The scope of the project is to meet the features requested from the user community in the initial project request and allow for two small incremental changes to the software. </p>
+<p>The software will be designed and tested to meet user stories and specifications. The software will be built using the Agile Software Development approach. The timeline for completion of the project shall be one semester. Initial release will be version 1.0 and subsequent releases will follow the standard point release model. This project aims to provide an applicable solution for handling the storage and retrieval of emails. The use of advanced object-oriented techniques will provide a foundation for further developers to create and deploy advanced versions of the tool. The foundation provided by the development of this project will be a step toward creating additional enhancements and features in subsequent releases; with each focusing on one specialized part of the email tool. The scope of the project is to meet the features requested from the user community in the initial project request and allow for two small incremental changes to the software. </p>
 
 <p>The software product being created will be a web based email platform that will allow users to login and view their emails. Emails can be created and sent with or without attachments. A user will also be able to search email by subject and then forward an email to another email address. </p>
 
@@ -79,5 +79,6 @@ visit browser and type:
 
 <h3>Chad Whitney</h3>
 <h4>github user : <a href="https://github.com/cwgu">cwgu</a></h4>
+<h4>github user : <a href="https://github.com/wickedcoastal">wickedcoastal</a></h4>
 
 <p>Chad Whitney is a graduate student in the computer science program at Mississippi State. Chad has many years of experience in project management and software development.</p>

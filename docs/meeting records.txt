@@ -1,3 +1,4 @@
+This file has been moved to the Wiki on github.
 
 08/23/2020 Met online with Trey, Chad, William and Joe. Assigned responsibilities for project. Built out prototype SRS document waiting for more info. Launched basic Docker container and sicussed technology. Worked through Docker installation issue on user machines
 
