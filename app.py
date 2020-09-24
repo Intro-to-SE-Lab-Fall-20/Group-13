@@ -1,7 +1,7 @@
 #SE Project Email program Willam Giddens, Trey O'neal, Joe Howard, Chad Whitney
 import creds
 from flask import Flask, render_template, url_for, flash, redirect
-from forms import LoginForm
+from forms import LoginForm, Search
 from nylas import APIClient
 
 app = Flask(__name__)
@@ -53,7 +53,7 @@ def emailsearch():
     creds.ACCESS_TOKEN    
     )
 
-    data = nylas.messages.search("chad")
+    data = Search()
 
 
 
