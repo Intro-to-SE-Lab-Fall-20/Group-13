@@ -9,3 +9,4 @@ before_install:
 
 script:
     - docker run -d -p 127.0.0.1:5000:5000 seflask sh -c "python app.py && flake8"
+    - pytest
