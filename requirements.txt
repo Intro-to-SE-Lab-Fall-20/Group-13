@@ -1,5 +1,6 @@
 #built more robust requirments, can parse down later for faster builds
 
+Flake8
 Flask==1.1.1
 Flask-WTF==0.14.2
 itsdangerous==1.1.0
