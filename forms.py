@@ -13,3 +13,11 @@ class LoginForm(FlaskForm):
 class Search():
     query = StringField('query')
     submit = SubmitField('Search')
+
+class ComposeEmail(FlaskForm):
+    to = StringField('email', validators=[DataRequired(),Email()])
+    cc = StringField('email', validators=[DataRequired(),Email()])
+    bcc = StringField('email', validators=[DataRequired(),Email()])
+    subject = StringField()
+    body = StringField()
+    submit = SubmitField('Send')
