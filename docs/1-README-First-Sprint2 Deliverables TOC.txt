@@ -10,6 +10,7 @@ Class Diagram:			Class Diagram.jpg
 Sequence Diagram		Sequence Diagram.jpg
 Story Taskbreakdown		Taskbreakdown.jpg
 Plan for next release		Project Release Plan.docx
+Sprint 3 issues log		Sprint_3_issues.docx
 Frequent Meetings		meeting records.txt
 Review of Pull & Commmits	2 Pull Request reviewed. 1 was a merge of forked code into master #18
 Continuous Integration (CI)	Incorporated Travis CI. We have this working. Issue #14 closed. Next step is determine test cases.
