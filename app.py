@@ -52,6 +52,7 @@ def email():
 def emailsearch():
     from nylas import APIClient
     
+    form = ComposeForm()
     nylas = APIClient(    creds.CLIENT_ID,
     creds.CLIENT_SECRET,
     creds.ACCESS_TOKEN    
@@ -82,5 +83,17 @@ def emails(id):
 
     return render_template("emails.html", data=data)
          
+@app.route("/compose/", methods=['GET', 'POST'])
+def compose():
+    from nylas import APIClient
+    
+    nylas = APIClient(    creds.CLIENT_ID,
+    creds.CLIENT_SECRET,
+    creds.ACCESS_TOKEN    
+    )
 
+    data = Search()
+
+
+    return render_template("compose.html", data=data, form=form)
 app.run(debug=True, host ='0.0.0.0')
