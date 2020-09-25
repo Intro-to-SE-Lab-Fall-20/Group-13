@@ -23,5 +23,5 @@ RUN export FLASK_ENV=development
 EXPOSE 5000
 
 #sets entrypoint for application
-#ENTRYPOINT ["python3"]
-#CMD ["app.py"]
+ENTRYPOINT ["python3"]
+CMD ["app.py"]

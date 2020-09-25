@@ -1,7 +1,7 @@
 #SE Project Email program Willam Giddens, Trey O'neal, Joe Howard, Chad Whitney
 import creds
 from flask import Flask, render_template, url_for, flash, redirect
-from forms import LoginForm, Search
+from forms import LoginForm, Search, ComposeEmail
 from nylas import APIClient
 
 app = Flask(__name__)
@@ -52,7 +52,7 @@ def email():
 def emailsearch():
     from nylas import APIClient
     
-    form = ComposeForm()
+    
     nylas = APIClient(    creds.CLIENT_ID,
     creds.CLIENT_SECRET,
     creds.ACCESS_TOKEN    
@@ -86,13 +86,15 @@ def emails(id):
 @app.route("/compose/", methods=['GET', 'POST'])
 def compose():
     from nylas import APIClient
-    
+    form = ComposeEmail()
+
     nylas = APIClient(    creds.CLIENT_ID,
     creds.CLIENT_SECRET,
     creds.ACCESS_TOKEN    
     )
+    data = []
 
-    data = Search()
+  
 
 
     return render_template("compose.html", data=data, form=form)

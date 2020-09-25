@@ -4,20 +4,30 @@
 
 
 <body class="text-center">
+    <div class="card">
+        <div class="card-body">
     <form>
         <h1 class="h3 mb-3 font-weight-normal">Compose New Email</h1>
       <label for="to" class="sr-only">to: Email address</label>
       <input type="email" id="to" class="form-control" placeholder="To Email address" required autofocus>
+      <br>
       <label for="cc" class="sr-only">cc: Email address</label>
       <input type="email" id="cc" class="form-control" placeholder="CC Email address" required autofocus>
+      <br>
       <label for="bcc" class="sr-only">bcc: Email address</label>
       <input type="email" id="bcc" class="form-control" placeholder="BCC Email address" required autofocus>
+      <br>
       <label for="subject" class="sr-only">Subject</label>
+      <input type="text" id="subject" class="form-control" required autofocus>
+      <br>
       <label for="body" class="sr-only">Body</label>
+      <input type="text" id="body" class="form-control" required autofocus>
+      <br>
       <button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
       
     </form>
-
+    </div>
+    </div>
 
 
 {% endblock content %}
