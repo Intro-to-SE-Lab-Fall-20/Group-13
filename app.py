@@ -3,10 +3,14 @@ import creds
 from flask import Flask, render_template, url_for, flash, redirect
 from forms import LoginForm, Search, ComposeEmail
 from nylas import APIClient
+from flask_wtf.csrf import CSRFProtect
+
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ourseecretkeyz1112'
-
+app.config['WTF_CSRF_SECRET_KEY'] = 'ourseecretkeyz1112'
+csrf = CSRFProtect(app)
 
 @app.route('/')
 def default():
@@ -84,18 +88,53 @@ def emails(id):
     return render_template("emails.html", data=data)
          
 @app.route("/compose/", methods=['GET', 'POST'])
+
 def compose():
+    
     from nylas import APIClient
     form = ComposeEmail()
+    print("hello chad")
 
-    nylas = APIClient(    creds.CLIENT_ID,
-    creds.CLIENT_SECRET,
-    creds.ACCESS_TOKEN    
-    )
-    data = []
+    if form.is_submitted():
+        print("submitted")
+        print(form.data)
 
-  
+    if form.validate():
+        print("valid")
 
+    print(form.errors)
+    
+    
+    
+    if form.validate_on_submit():
+        print("hello world")
+        
+        nylas = APIClient(creds.CLIENT_ID,
+        creds.CLIENT_SECRET,
+        creds.ACCESS_TOKEN    
+        )
+        print(form.data)
+        draft = nylas.drafts.create()
+        # draft.subject = "With Love, from Nylas"
+        # draft.body = "This email was sent using the Nylas Email API. Visit https://nylas.com for details."
+        # draft.to = [{'name': 'My Nylas Friend', 'email': 'swag@nylas.com'}]
+        data = form.data
+        print(data['body'])
+        draft.subject = data['subject']
+        draft.to = [{'email': data['to']}]
+        draft.body = data['body']
+        draft.send()
+        flash('Email Sent', 'success')
 
-    return render_template("compose.html", data=data, form=form)
+    else:                   
+        return render_template("compose.html", form=form)                    
+    return render_template("compose.html", form=form)
 app.run(debug=True, host ='0.0.0.0')
+
+# class ComposeEmail(FlaskForm):
+#     to = StringField('email', validators=[DataRequired(),Email()])
+#     cc = StringField('email', validators=[DataRequired(),Email()])
+#     bcc = StringField('email', validators=[DataRequired(),Email()])
+#     subject = StringField()
+#     body = StringField()
+#     submit = SubmitField('Send')
