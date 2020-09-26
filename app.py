@@ -62,7 +62,7 @@ def emailsearch():
     creds.ACCESS_TOKEN    
     )
 
-    data = Search()
+    data = Search("chad")
 
 
     return render_template("email-search.html", data=data)
