@@ -10,3 +10,5 @@ pytest
 requests==2.22.0
 Werkzeug==0.16.0
 WTForms==2.2.1
+flask-login
+flask-sqlalchemy

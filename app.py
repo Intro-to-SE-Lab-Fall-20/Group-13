@@ -1,16 +1,36 @@
 #SE Project Email program Willam Giddens, Trey O'neal, Joe Howard, Chad Whitney
 import creds
 from flask import Flask, render_template, url_for, flash, redirect
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager,UserMixin, login_user, login_required, logout_user, current_user
 from forms import LoginForm, Search, ComposeEmail
 from nylas import APIClient
 from flask_wtf.csrf import CSRFProtect
 
-
+temdb = 'mysql://'+ creds.sql_username + ':' + creds.sql_password + '@' + creds.sql_host + '/' + creds.sql_database
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ourseecretkeyz1112'
 app.config['WTF_CSRF_SECRET_KEY'] = 'ourseecretkeyz1112'
+app.config['SQLALCHEMY_DATATBASE_URI'] = temdb
 csrf = CSRFProtect(app)
+
+db= SQLAlchemy(app)
+login_manager = LoginManager()
+
+class USER(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(30))
+    password = db.Column(db.String(30))
+
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('You have Been Logged Out!', 'success')
+    return redirect(url_for('default'))
 
 @app.route('/')
 def default():
@@ -129,6 +149,16 @@ def compose():
     else:                   
         return render_template("compose.html", form=form)                    
     return render_template("compose.html", form=form)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+
+
+
 app.run(debug=True, host ='0.0.0.0')
 
 # class ComposeEmail(FlaskForm):
