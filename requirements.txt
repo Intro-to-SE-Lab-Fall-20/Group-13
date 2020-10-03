@@ -3,6 +3,7 @@
 Flake8
 Flask==1.1.1
 Flask-WTF==0.14.2
+mock==3.0.5
 itsdangerous==1.1.0
 Jinja2==2.10.3
 Nylas
@@ -11,4 +12,8 @@ requests==2.22.0
 Werkzeug==0.16.0
 WTForms==2.2.1
 flask-login
-flask-sqlalchemy
+mysql-connector-python
+Flask-Bcrypt
+
+
+

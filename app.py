@@ -1,40 +1,95 @@
 #SE Project Email program Willam Giddens, Trey O'neal, Joe Howard, Chad Whitney
 import creds
-from flask import Flask, render_template, url_for, flash, redirect
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, url_for, flash, redirect, request, session, g
+import mysql.connector
 from flask_login import LoginManager,UserMixin, login_user, login_required, logout_user, current_user
 from forms import LoginForm, Search, ComposeEmail
 from nylas import APIClient
 from flask_wtf.csrf import CSRFProtect
+from flask_bcrypt import Bcrypt
 
-temdb = 'mysql://'+ creds.sql_username + ':' + creds.sql_password + '@' + creds.sql_host + '/' + creds.sql_database
 
+#configures the flask ap
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ourseecretkeyz1112'
 app.config['WTF_CSRF_SECRET_KEY'] = 'ourseecretkeyz1112'
-app.config['SQLALCHEMY_DATATBASE_URI'] = temdb
 csrf = CSRFProtect(app)
+bcrypt = Bcrypt(app)
 
-db= SQLAlchemy(app)
 login_manager = LoginManager()
 
-class USER(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(30))
-    password = db.Column(db.String(30))
 
 
+@app.before_request
+def before_request():
+    if 'id' in session:
+        user = [x for x in users if x.id == session['id']][0]
+        g.user = user
 
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    flash('You have Been Logged Out!', 'success')
-    return redirect(url_for('default'))
 
+class User:
+    def __init__(self,id,username,password):
+        self.id = id
+        self.email_address = email_address
+        self.password = password
+    
+    def __repr__(self):
+        return f'<User: {self.email_address}>'
+
+
+# code get user from database
+def getUser(id):
+    config = {
+        'user': creds.sql_username,
+        'password': creds.sql_password,
+        'host': creds.sql_host,
+        'port': creds.sql_port,
+        'database': creds.sql_database
+    }
+    connection = mysql.connector.connect(**config)
+    cursor = connection.cursor()
+    query = ("SELECT * FROM user WHERE id =" + str(id) )
+    cursor.execute(query)
+    for item in cursor:
+        print(item)
+    cursor.close()
+    connection.close()
+
+def updateUser(id, passw):
+    pw_hash = bcrypt.generate_password_hash(passw).decode('utf-8')
+    
+    config = {
+        'user': creds.sql_username,
+        'password': creds.sql_password,
+        'host': creds.sql_host,
+        'port': creds.sql_port,
+        'database': creds.sql_database
+    }
+    connection = mysql.connector.connect(**config)
+    cursor = connection.cursor()
+    query = ("UPDATE user SET password = \'" + pw_hash + "\' WHERE id = \'" + str(id)+ "\';" )
+    print(query)
+    cursor.execute(query)
+    connection.commit()
+    cursor.close()
+    connection.close()
+    
+    
+    
+    
+
+
+## Sets the default route for the application
 @app.route('/')
 def default():
-    return render_template('default.html')
+    
+    updateUser(2,"strong")
+    getUser(2)
+    
+
+      
+    return redirect(url_for('login'))
+
 
 ## This is the login route
 
@@ -54,6 +109,16 @@ def login():
 @app.route('/success')
 def default1():
     return render_template('default1.html')   
+
+
+##sets the logout route
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('You have Been Logged Out!', 'success')
+    return redirect(url_for('default'))
+
 
 ## This route shows current emails
 
@@ -75,8 +140,7 @@ def email():
 @app.route("/email-search/", methods=['GET', 'POST'])
 def emailsearch():
     from nylas import APIClient
-    
-    
+   
     nylas = APIClient(    creds.CLIENT_ID,
     creds.CLIENT_SECRET,
     creds.ACCESS_TOKEN    
@@ -88,6 +152,7 @@ def emailsearch():
     return render_template("email-search.html", data=data)
 
 ## This route shows individual emails
+
 
 @app.route("/emails/<id>", methods=['GET', 'POST'])
 def emails(id):
@@ -107,6 +172,8 @@ def emails(id):
 
     return render_template("emails.html", data=data)
          
+
+## Sets the route for composing a new email
 @app.route("/compose/", methods=['GET', 'POST'])
 
 def compose():
@@ -135,9 +202,6 @@ def compose():
         )
         print(form.data)
         draft = nylas.drafts.create()
-        # draft.subject = "With Love, from Nylas"
-        # draft.body = "This email was sent using the Nylas Email API. Visit https://nylas.com for details."
-        # draft.to = [{'name': 'My Nylas Friend', 'email': 'swag@nylas.com'}]
         data = form.data
         print(data['body'])
         draft.subject = data['subject']
@@ -158,13 +222,4 @@ def load_user(user_id):
 
 
 
-
 app.run(debug=True, host ='0.0.0.0')
-
-# class ComposeEmail(FlaskForm):
-#     to = StringField('email', validators=[DataRequired(),Email()])
-#     cc = StringField('email', validators=[DataRequired(),Email()])
-#     bcc = StringField('email', validators=[DataRequired(),Email()])
-#     subject = StringField()
-#     body = StringField()
-#     submit = SubmitField('Send')
