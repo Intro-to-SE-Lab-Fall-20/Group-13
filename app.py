@@ -38,7 +38,7 @@ def isUserValid(email, candidate):
     id = getUserId(email)
     print(id)
     if id == -1:
-        return False
+        return (False,-1)
     
     config = {
         'user': creds.sql_username,
@@ -87,14 +87,6 @@ def getUserId(email_address):
     connection.close()
 
     return -1    
-        
-        
- 
-
-
-    
-    
-    
 
 
 # Sets the default route for the application
@@ -110,15 +102,17 @@ def default():
 def login():
     form = LoginForm()
     if request.method == 'POST':
-        session.pop('email_address', None)
+        session.pop('id', None)
         if form.validate_on_submit():
             validate = isUserValid(form.email.data, form.password.data)
-            if validate[0]:
+            if validate[0] == False:
+                flash('Login Failed, Please Check Your Credentials and Try Again', 'danger')
+           
+            else:
                 session['id'] = validate[1]
                 flash('You have Been Logged In!', 'success')
                 return redirect(url_for('email'))
-            else:
-                flash('Login Failed, Please Check Your Credentials and Try Again', 'danger')
+                
     
     return render_template('default1.html', title='Login', form=form)
 
@@ -136,7 +130,7 @@ def logout():
     if not g.user:
         return redirect(url_for('login'))    
     
-    session.pop('email_address', None)
+    session.pop('id', None)
     flash('You have Been Logged Out!', 'success')
     return redirect(url_for('login'))
 
@@ -146,7 +140,7 @@ def logout():
 @app.route("/email/", methods=['GET', 'POST'])
 def email():
     if not g.user:
-        session.pop('email_address', None)
+        session.pop('id', None)
         return redirect(url_for('login'))
     
     from nylas import APIClient
@@ -165,7 +159,7 @@ def email():
 @app.route("/email-search/", methods=['GET', 'POST'])
 def emailsearch():
     if not g.user:
-        session.pop('email_address', None)
+        session.pop('id', None)
         return redirect(url_for('login'))
         
     from nylas import APIClient
@@ -187,7 +181,7 @@ def emailsearch():
 def emails(id):
     
     if not g.user:
-        session.pop('email_address', None)
+        session.pop('id', None)
         return redirect(url_for('login'))    
     
     
@@ -214,7 +208,7 @@ def emails(id):
 def compose():
     
     if not g.user:
-        session.pop('email_address', None)
+        session.pop('id', None)
         return redirect(url_for('login'))    
     
     
@@ -258,8 +252,7 @@ def compose():
 def before_request():
     g.user = None
     if 'id' in session:
-        print(id)
-        g.user = id
+        g.user = 1
 
 
 app.run(debug=True, host ='0.0.0.0')
