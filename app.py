@@ -1,44 +1,45 @@
-#SE Project Email program Willam Giddens, Trey O'neal, Joe Howard, Chad Whitney
+# SE Project Email program Willam Giddens, Trey O'neal, Joe Howard, Chad Whitney
 import creds
-from flask import Flask, render_template, url_for, flash, redirect, request, session, g
+from flask import Flask, abort, render_template, url_for, flash, redirect, request, session, g 
 import mysql.connector
-from flask_login import LoginManager,UserMixin, login_user, login_required, logout_user, current_user
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from forms import LoginForm, Search, ComposeEmail
 from nylas import APIClient
 from flask_wtf.csrf import CSRFProtect
 from flask_bcrypt import Bcrypt
 
 
-#configures the flask ap
+# configures the flask ap
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ourseecretkeyz1112'
 app.config['WTF_CSRF_SECRET_KEY'] = 'ourseecretkeyz1112'
 csrf = CSRFProtect(app)
 bcrypt = Bcrypt(app)
 
-login_manager = LoginManager()
 
-
-
-@app.before_request
-def before_request():
-    if 'id' in session:
-        user = [x for x in users if x.id == session['id']][0]
-        g.user = user
 
 
 class User:
-    def __init__(self,id,username,password):
+    def __init__(self, id, username, password):
         self.id = id
         self.email_address = email_address
         self.password = password
-    
+
     def __repr__(self):
         return f'<User: {self.email_address}>'
 
 
-# code get user from database
-def getUser(id):
+
+
+# isUserValid takes in email_address and password then returns on whether or not a user's credentials are valid
+
+def isUserValid(email, candidate):
+    
+    id = getUserId(email)
+    print(id)
+    if id == -1:
+        return False
+    
     config = {
         'user': creds.sql_username,
         'password': creds.sql_password,
@@ -48,16 +49,24 @@ def getUser(id):
     }
     connection = mysql.connector.connect(**config)
     cursor = connection.cursor()
-    query = ("SELECT * FROM user WHERE id =" + str(id) )
+    query = ("SELECT * FROM user WHERE id =" + str(id))
+    print("in is valid")
+    print(query)
+
     cursor.execute(query)
+    print(cursor)
     for item in cursor:
         print(item)
+        temphash = item[2]
+
+
     cursor.close()
     connection.close()
 
-def updateUser(id, passw):
-    pw_hash = bcrypt.generate_password_hash(passw).decode('utf-8')
-    
+    return (bcrypt.check_password_hash(temphash, candidate),id) 
+
+## getUserId takes in an email address and returns a valid id or a -1 if email not found
+def getUserId(email_address):
     config = {
         'user': creds.sql_username,
         'password': creds.sql_password,
@@ -67,63 +76,79 @@ def updateUser(id, passw):
     }
     connection = mysql.connector.connect(**config)
     cursor = connection.cursor()
-    query = ("UPDATE user SET password = \'" + pw_hash + "\' WHERE id = \'" + str(id)+ "\';" )
-    print(query)
+    query = ("SELECT * FROM user")
     cursor.execute(query)
-    connection.commit()
+    
+    for item in cursor:     
+        if item[1] == email_address:
+            return item[0]
+    
     cursor.close()
     connection.close()
-    
+
+    return -1    
+        
+        
+ 
+
+
     
     
     
 
 
-## Sets the default route for the application
+# Sets the default route for the application
 @app.route('/')
 def default():
     
-    updateUser(2,"strong")
-    getUser(2)
-    
-
-      
     return redirect(url_for('login'))
 
 
-## This is the login route
+# This is the login route
 
 @app.route('/login',methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    if form.validate_on_submit():
-        if form.email.data == 'test@test.com' and form.password.data == 'thegoonies':
-            flash('You have Been Logged In!', 'success')
-            return redirect(url_for('email'))
-        else:
-            flash('Login Failed, Please Check Your Credentials and Try Again', 'danger')
+    if request.method == 'POST':
+        session.pop('email_address', None)
+        if form.validate_on_submit():
+            validate = isUserValid(form.email.data, form.password.data)
+            if validate[0]:
+                session['id'] = validate[1]
+                flash('You have Been Logged In!', 'success')
+                return redirect(url_for('email'))
+            else:
+                flash('Login Failed, Please Check Your Credentials and Try Again', 'danger')
+    
     return render_template('default1.html', title='Login', form=form)
 
-## This route shows succesful login
+# This route shows succesful login
 
 @app.route('/success')
 def default1():
     return render_template('default1.html')   
 
 
-##sets the logout route
+# sets the logout route
 @app.route('/logout')
-@login_required
+
 def logout():
-    logout_user()
+    if not g.user:
+        return redirect(url_for('login'))    
+    
+    session.pop('email_address', None)
     flash('You have Been Logged Out!', 'success')
-    return redirect(url_for('default'))
+    return redirect(url_for('login'))
 
 
-## This route shows current emails
+# This route shows current emails
 
 @app.route("/email/", methods=['GET', 'POST'])
 def email():
+    if not g.user:
+        session.pop('email_address', None)
+        return redirect(url_for('login'))
+    
     from nylas import APIClient
   
     nylas = APIClient(    creds.CLIENT_ID,
@@ -135,10 +160,14 @@ def email():
 
     return render_template("email.html", data=data)
 
-## This route searches emails and returns emails found
+# This route searches emails and returns emails found
 
 @app.route("/email-search/", methods=['GET', 'POST'])
 def emailsearch():
+    if not g.user:
+        session.pop('email_address', None)
+        return redirect(url_for('login'))
+        
     from nylas import APIClient
    
     nylas = APIClient(    creds.CLIENT_ID,
@@ -151,11 +180,17 @@ def emailsearch():
 
     return render_template("email-search.html", data=data)
 
-## This route shows individual emails
+# This route shows individual emails
 
 
 @app.route("/emails/<id>", methods=['GET', 'POST'])
 def emails(id):
+    
+    if not g.user:
+        session.pop('email_address', None)
+        return redirect(url_for('login'))    
+    
+    
     from nylas import APIClient
   
     nylas = APIClient(    creds.CLIENT_ID,
@@ -173,10 +208,15 @@ def emails(id):
     return render_template("emails.html", data=data)
          
 
-## Sets the route for composing a new email
+# Sets the route for composing a new email
 @app.route("/compose/", methods=['GET', 'POST'])
 
 def compose():
+    
+    if not g.user:
+        session.pop('email_address', None)
+        return redirect(url_for('login'))    
+    
     
     from nylas import APIClient
     form = ComposeEmail()
@@ -214,12 +254,12 @@ def compose():
         return render_template("compose.html", form=form)                    
     return render_template("compose.html", form=form)
 
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
-
+@app.before_request
+def before_request():
+    g.user = None
+    if 'id' in session:
+        print(id)
+        g.user = id
 
 
 app.run(debug=True, host ='0.0.0.0')
