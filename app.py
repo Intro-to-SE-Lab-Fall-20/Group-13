@@ -101,8 +101,9 @@ def default():
 @app.route('/login',methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    session.pop('id', None)
     if request.method == 'POST':
-        session.pop('id', None)
+        
         if form.validate_on_submit():
             validate = isUserValid(form.email.data, form.password.data)
             if validate[0] == False:
@@ -127,10 +128,9 @@ def default1():
 @app.route('/logout')
 
 def logout():
-    if not g.user:
-        return redirect(url_for('login'))    
     
     session.pop('id', None)
+    session.pop('csrf_token', None)
     flash('You have Been Logged Out!', 'success')
     return redirect(url_for('login'))
 
@@ -139,9 +139,6 @@ def logout():
 
 @app.route("/email/", methods=['GET', 'POST'])
 def email():
-    if not g.user:
-        session.pop('id', None)
-        return redirect(url_for('login'))
     
     from nylas import APIClient
   
@@ -158,10 +155,6 @@ def email():
 
 @app.route("/email-search/", methods=['GET', 'POST'])
 def emailsearch():
-    if not g.user:
-        session.pop('id', None)
-        return redirect(url_for('login'))
-        
     from nylas import APIClient
    
     nylas = APIClient(    creds.CLIENT_ID,
@@ -180,10 +173,7 @@ def emailsearch():
 @app.route("/emails/<id>", methods=['GET', 'POST'])
 def emails(id):
     
-    if not g.user:
-        session.pop('id', None)
-        return redirect(url_for('login'))    
-    
+   
     
     from nylas import APIClient
   
@@ -207,52 +197,51 @@ def emails(id):
 
 def compose():
     
-    if not g.user:
-        session.pop('id', None)
-        return redirect(url_for('login'))    
-    
     
     from nylas import APIClient
-    form = ComposeEmail()
-    print("hello chad")
+    form = ComposeEmail()    
+    if request.method == 'POST':
 
-    if form.is_submitted():
-        print("submitted")
-        print(form.data)
+        print("hello chad")
 
-    if form.validate():
-        print("valid")
+        if form.is_submitted():
+            print("submitted")
+            print(form.data)
 
-    print(form.errors)
-    
-    
-    
-    if form.validate_on_submit():
-        print("hello world")
+        if form.validate():
+            print("valid")
+
+        print(form.errors)
         
-        nylas = APIClient(creds.CLIENT_ID,
-        creds.CLIENT_SECRET,
-        creds.ACCESS_TOKEN    
-        )
-        print(form.data)
-        draft = nylas.drafts.create()
-        data = form.data
-        print(data['body'])
-        draft.subject = data['subject']
-        draft.to = [{'email': data['to']}]
-        draft.body = data['body']
-        draft.send()
-        flash('Email Sent', 'success')
+        
+        
+        if form.validate_on_submit():
+            print("hello world")
+            
+            nylas = APIClient(creds.CLIENT_ID,
+            creds.CLIENT_SECRET,
+            creds.ACCESS_TOKEN    
+            )
+            print(form.data)
+            draft = nylas.drafts.create()
+            data = form.data
+            print(data['body'])
+            draft.subject = data['subject']
+            draft.to = [{'email': data['to']}]
+            draft.body = data['body']
+            draft.send()
+            flash('Email Sent', 'success')
 
-    else:                   
-        return render_template("compose.html", form=form)                    
+        else:                   
+            return render_template("compose.html", form=form)                    
     return render_template("compose.html", form=form)
 
 @app.before_request
 def before_request():
-    g.user = None
-    if 'id' in session:
-        g.user = 1
+    print(session)
+    if 'id' not in session and request.endpoint != 'login':
+        return redirect(url_for('login'))
+    
 
 
 app.run(debug=True, host ='0.0.0.0')
