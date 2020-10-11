@@ -7,6 +7,7 @@ RUN apk update && apk add gcc libc-dev make git libffi-dev openssl-dev python3-d
 RUN apk add cmd:pip3
 
 
+
 #set work directory and copies files from current folder
 WORKDIR /app
 COPY . /app

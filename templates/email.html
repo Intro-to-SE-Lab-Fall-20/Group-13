@@ -1,33 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
-<div>
-
-    <form class="form-inline">
-        <div class="form-group mx-sm-3 mb-2">
-          <label for="inputPassword2" class="sr-only">Search emails</label>
-          <input type="password" class="form-control" id="inputPassword2" placeholder="Search the email">
-        </div>
-        <a href="/email-search/" type="submit" class="btn btn-primary mb-2">Search</a>
-      </form>
-
-
+<div class="container mb-6">
+    <form class="form-check form-check-inline">
+        <label for="query" class="sr-only">Search</label>
+        <input type="text" name="query" class="form-control mr-3" placeholder="Query?" required
+            autofocus>
+        <button class="btn btn-primary btn-block mr-3" type="submit">Search</button>
+    </form>
+    <a href="/compose/" type="button" class="btn btn-primary">Compose Email</a>
 </div>
-
-<div><a href="/compose/" type="button" class="btn btn-primary">Compose Email</a>
 </div>
-    <div class="content-section">
-        <div class="list-group">
+<div class="container p-5">
+<div class="content-section">
+    <div class="list-group">
         {% for message in data %}
 
 
-        
-            <a href="/emails/{{ message.id }}" class="list-group-item list-group-item-action">
-                <strong>{{ message.subject }} </strong><br>
-                <hr>
-                {{ message.snippet}} received - {{message.received_at}}
 
-
-                
+        <a href="/emails/{{ message.id }}" class="list-group-item list-group-item-action">
+            <strong>{{ message.subject }} </strong><br>
+            <hr>
+            {{ message.snippet}} received - {{message.received_at}}
 
 
 
@@ -55,14 +48,18 @@
 
 
 
-            </a>
-            
-         <hr>
+
+
+
+        </a>
+
+        <hr>
 
         {% endfor %}
     </div>
 
-      
-       
-    </div>
+
+
+</div>
+</div>
 {% endblock content %}

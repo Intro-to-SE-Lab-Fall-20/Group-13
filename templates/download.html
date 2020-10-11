@@ -9,7 +9,16 @@
 </div>
 
 <div class="row">
-
+    <div class="col-sm">
+    <form class="form-inline">
+        <div class="form-group mx-sm-3 mb-2">
+          <label for="inputPassword2" class="sr-only">Search emails</label>
+          <input type="password" class="form-control" id="inputPassword2" placeholder="Search the email">
+        </div>
+        
+        <button type="submit" class="btn btn-primary px-2 mb-2">Search</button>
+      </form>
+      </div>
       <div class="col-sm">
         <a href="/compose" type="button" class="btn btn-primary px-2 mb-2">Compose</a>
      </div>
@@ -51,7 +60,7 @@
                     none
                 {% else %}
                     {% for file in data.files %}
-                        <a href ="/download/{{ file.id }}" download={{ file.filename}} >{{ file.filename }} </a>
+                        <a href ="/download/{{ file.id }}" target="_blank" >{{ file.filename }} </a>
                     {% endfor %}
             {% endif %}               
             </p>

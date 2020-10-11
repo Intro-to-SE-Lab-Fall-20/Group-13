@@ -12,7 +12,7 @@ class LoginForm(FlaskForm):
 
 class Search():
     query = StringField('query')
-    submit = SubmitField('Search')
+    search = SubmitField('Search')
 
 class ComposeEmail(FlaskForm):
     to = StringField('to', validators=[DataRequired(),Email()])
@@ -20,4 +20,4 @@ class ComposeEmail(FlaskForm):
     bcc = StringField('bcc')
     subject = StringField('Subject')
     body = TextAreaField('Body')
-    send = SubmitField('Send')
+    submit = SubmitField('Send')

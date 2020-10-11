@@ -1,6 +1,8 @@
 # SE Project Email program Willam Giddens, Trey O'neal, Joe Howard, Chad Whitney
 import creds
-from flask import Flask, abort, render_template, url_for, flash, redirect, request, session, g 
+import os
+import tempfile
+from flask import Flask, abort, render_template, url_for, flash, redirect, request, session, g , send_file
 import mysql.connector
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from forms import LoginForm, Search, ComposeEmail
@@ -139,33 +141,45 @@ def logout():
 
 @app.route("/email/", methods=['GET', 'POST'])
 def email():
-    
     from nylas import APIClient
-  
+    
     nylas = APIClient(    creds.CLIENT_ID,
-    creds.CLIENT_SECRET,
-    creds.ACCESS_TOKEN    
-    )
+        creds.CLIENT_SECRET,
+        creds.ACCESS_TOKEN    
+        )
+    form = Search()
+    if 'query' in request.args :
+        query = request.args.get('query')
+        print( query)
+        data = nylas.messages.search(query)
+        return render_template("email.html", form=form, data=data)
+    else:
+        data = nylas.messages.all()
 
-    data = nylas.messages.all()
-
-    return render_template("email.html", data=data)
+    return render_template("email.html", form=form, data=data)
 
 # This route searches emails and returns emails found
 
 @app.route("/email-search/", methods=['GET', 'POST'])
 def emailsearch():
+    # # class Search():
+    # query = StringField('query')
+    # submit = SubmitField('Search')
+    
+    form = Search()
+
     from nylas import APIClient
-   
+
     nylas = APIClient(    creds.CLIENT_ID,
     creds.CLIENT_SECRET,
     creds.ACCESS_TOKEN    
     )
 
-    data = Search("chad")
+    data = Search(form.query.data)
+    print
 
+    return render_template("emails.html", data=data)
 
-    return render_template("email-search.html", data=data)
 
 # This route shows individual emails
 
@@ -191,7 +205,30 @@ def emails(id):
 
     return render_template("emails.html", data=data)
          
+@app.route("/download/<id>", methods=['GET'])
+def download(id):
+    
+    
+    from nylas import APIClient
+  
+    nylas = APIClient(    creds.CLIENT_ID,
+    creds.CLIENT_SECRET,
+    creds.ACCESS_TOKEN    
+    )
 
+
+    # Replace {id} with the appropriate file id
+    file = nylas.files.get(id)
+    root = os.path.abspath(os.curdir)
+    filename = root + '/static/download/' + file['filename']
+    temp = open(filename, 'w+b')
+    temp.write(file.download())
+    temp.close()    
+    
+ 
+    return send_file(filename, as_attachment=True, attachment_filename=file['filename'], mimetype=file['content_type'])
+    
+    
 # Sets the route for composing a new email
 @app.route("/compose/", methods=['GET', 'POST'])
 
