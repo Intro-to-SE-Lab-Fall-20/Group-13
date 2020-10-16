@@ -52,7 +52,7 @@ def isUserValid(email, candidate):
     connection = mysql.connector.connect(**config)
     cursor = connection.cursor()
     query = ("SELECT * FROM user WHERE id =" + str(id))
-    print("in is valid")
+    print("in is valid.")
     
 
     cursor.execute(query)
