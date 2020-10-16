@@ -32,13 +32,13 @@ class User:
 
 
 
-
+##TEST
 # isUserValid takes in email_address and password then returns on whether or not a user's credentials are valid
 
 def isUserValid(email, candidate):
     
     id = getUserId(email)
-    print(id)
+    
     if id == -1:
         return (False,-1)
     
@@ -53,12 +53,12 @@ def isUserValid(email, candidate):
     cursor = connection.cursor()
     query = ("SELECT * FROM user WHERE id =" + str(id))
     print("in is valid")
-    print(query)
+    
 
     cursor.execute(query)
-    print(cursor)
+    
     for item in cursor:
-        print(item)
+    
         temphash = item[2]
 
 
@@ -67,6 +67,7 @@ def isUserValid(email, candidate):
 
     return (bcrypt.check_password_hash(temphash, candidate),id) 
 
+##TEST
 ## getUserId takes in an email address and returns a valid id or a -1 if email not found
 def getUserId(email_address):
     config = {
@@ -150,7 +151,6 @@ def email():
     form = Search()
     if 'query' in request.args :
         query = request.args.get('query')
-        print( query)
         data = nylas.messages.search(query)
         return render_template("email.html", form=form, data=data)
     else:
@@ -176,8 +176,7 @@ def emailsearch():
     )
 
     data = Search(form.query.data)
-    print
-
+    
     return render_template("emails.html", data=data)
 
 
@@ -251,19 +250,20 @@ def compose():
         
         
         if form.validate_on_submit():
-            print("hello world")
-            
+                      
             nylas = APIClient(creds.CLIENT_ID,
             creds.CLIENT_SECRET,
             creds.ACCESS_TOKEN    
             )
-            print(form.data)
+            attachment = open(data['file'], 'r')
+            file = nylas.files.create()
+            
             draft = nylas.drafts.create()
             data = form.data
-            print(data['body'])
             draft.subject = data['subject']
             draft.to = [{'email': data['to']}]
             draft.body = data['body']
+            draft.attach(file)
             draft.send()
             flash('Email Sent', 'success')
 
@@ -289,7 +289,7 @@ def forward(id):
     
 @app.before_request
 def before_request():
-    print(session)
+    
     if 'id' not in session and request.endpoint != 'login':
         return redirect(url_for('login'))
     

@@ -1,7 +1,7 @@
 #This file stores forms for the application.
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, BooleanField,TextAreaField
+from wtforms import StringField, SubmitField, PasswordField, BooleanField,TextAreaField, FileField
 from wtforms.validators import DataRequired, Length, EqualTo, Email
 
 class LoginForm(FlaskForm):
@@ -20,6 +20,7 @@ class ComposeEmail(FlaskForm):
     bcc = StringField('bcc')
     subject = StringField('Subject')
     body = TextAreaField('Body')
+    fileName = FileField('File')
     submit = SubmitField('Send')
 
 class ForwardEmail(FlaskForm):
@@ -28,4 +29,5 @@ class ForwardEmail(FlaskForm):
     bcc = StringField('bcc')
     subject = StringField('Subject')
     body = TextAreaField('Body')
+    fileName = FileField('File')
     submit = SubmitField('Send')
