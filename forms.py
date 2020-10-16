@@ -21,3 +21,11 @@ class ComposeEmail(FlaskForm):
     subject = StringField('Subject')
     body = TextAreaField('Body')
     submit = SubmitField('Send')
+
+class ForwardEmail(FlaskForm):
+    to = StringField('to', validators=[DataRequired(),Email()])
+    cc = StringField('cc')
+    bcc = StringField('bcc')
+    subject = StringField('Subject')
+    body = TextAreaField('Body')
+    submit = SubmitField('Send')

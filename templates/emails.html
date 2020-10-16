@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-
+<script>
+    tinymce.init({
+      selector: 'textarea',
+      plugins: 'noneditable',
+      menubar:false,
+      plugins: 'autoresize',
+      autoresize_on_init: false
+    });
+  </script>
 <div class="container">
     <div class="row">
       <div class="col-sm">
@@ -44,7 +52,7 @@
             <p>bcc: </p>
 
             <h2>subject: {{ data.subject}}</h2>
-            <p>{{ data.snippet}}</p>
+            <p><textarea>{{ data.body}}</textarea></p>
 
             <p>Attachments:     
                 {% if data.files == 'none' %}

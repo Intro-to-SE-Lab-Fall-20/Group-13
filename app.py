@@ -5,13 +5,13 @@ import tempfile
 from flask import Flask, abort, render_template, url_for, flash, redirect, request, session, g , send_file
 import mysql.connector
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from forms import LoginForm, Search, ComposeEmail
+from forms import LoginForm, Search, ComposeEmail, ForwardEmail
 from nylas import APIClient
 from flask_wtf.csrf import CSRFProtect
 from flask_bcrypt import Bcrypt
 
 
-# configures the flask ap
+# configures the flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ourseecretkeyz1112'
 app.config['WTF_CSRF_SECRET_KEY'] = 'ourseecretkeyz1112'
@@ -239,16 +239,14 @@ def compose():
     form = ComposeEmail()    
     if request.method == 'POST':
 
-        print("hello chad")
 
         if form.is_submitted():
             print("submitted")
-            print(form.data)
 
         if form.validate():
             print("valid")
 
-        print(form.errors)
+#        print(form.errors)
         
         
         
@@ -273,6 +271,22 @@ def compose():
             return render_template("compose.html", form=form)                    
     return render_template("compose.html", form=form)
 
+@app.route("/forward/<id>", methods=['GET', 'POST'])
+def forward(id):
+    form = ForwardEmail    
+    nylas = APIClient(creds.CLIENT_ID,
+        creds.CLIENT_SECRET,
+        creds.ACCESS_TOKEN    
+    )
+    message = nylas.messages.get(id)
+        
+    return render_template("forward.html", data=message, form=form)
+    
+    
+    
+    
+    
+    
 @app.before_request
 def before_request():
     print(session)

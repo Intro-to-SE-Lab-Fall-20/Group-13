@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+
+<script>
+    tinymce.init({
+      selector: 'textarea',
+      menubar:false,
+      plugins: 'autoresize',
+      autoresize_on_init: false
+
+      });
+  </script>
+    
+
+    <div class="card">
+        <div class="card-body">
+    <form  method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <h1 class="h3 mb-3 font-weight-normal">Compose New Email</h1>
+      <label for="to">to:</label>
+      <input type="email" name="to" class="form-control" placeholder="To Email address" required autofocus>
+      <br>
+      <label for="cc">cc:</label>
+      <input type="email" name="cc" class="form-control" placeholder="CC Email address" autofocus>
+      <br>
+      <label for="bcc">bcc:</label>
+      <input type="email" name="bcc" class="form-control" placeholder="BCC Email address" autofocus>
+      <br>
+      <label for="subject">Subject</label>
+      <input type="text" name="subject" class="form-control" value= "{{ data.subject }} " autofocus>
+      <br>
+      
+      <label for="body">Body</label>
+      <textarea rows="5" cols="150" id="body" name="body" class="form-control input-lg" value= "{{ data.body }}" autofocus>{{ data.body }}</textarea>
+      <br>
+      
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
+      
+    </form>
+    </div>
+    </div>
+
+  
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    
+
+{% endblock content %}
