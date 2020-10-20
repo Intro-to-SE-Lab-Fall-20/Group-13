@@ -155,7 +155,7 @@ def email():
         return render_template("email.html", form=form, data=data)
     else:
         data = nylas.messages.all()
-
+        print(data)
     return render_template("email.html", form=form, data=data)
 
 # This route searches emails and returns emails found

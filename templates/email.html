@@ -14,47 +14,14 @@
 <div class="content-section">
     <div class="list-group">
         {% for message in data %}
-
-
-
-        <a href="/emails/{{ message.id }}" class="list-group-item list-group-item-action">
+      
+            <a href="/emails/{{ message.id }}" class="list-group-item list-group-item-action">
             <strong>{{ message.subject }} </strong><br>
             <hr>
             {{ message.snippet}} received - {{message.received_at}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        </a>
-
-        <hr>
-
+            </a>
+            <hr>
+    
         {% endfor %}
     </div>
 
