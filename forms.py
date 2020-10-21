@@ -29,5 +29,5 @@ class ForwardEmail(FlaskForm):
     bcc = StringField('bcc')
     subject = StringField('Subject')
     body = TextAreaField('Body')
-    fileName = FileField('File')
+    file = FileField('file')
     submit = SubmitField('Send')

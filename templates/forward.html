@@ -34,6 +34,16 @@
       <textarea rows="5" cols="150" id="body" name="body" class="form-control input-lg" value= "{{ data.body }}" autofocus>{{ data.body }}</textarea>
       <br>
       
+      {% for file in data.files %}
+
+      {{ file }}
+
+      <label for="attachment">Attachment</label>
+      <textarea rows="5" cols="150" id="file" name="file" class="form-control input-lg" value= "{{ file.id }}" autofocus>{{ file.filename }}</textarea>
+      <br>
+      {% endfor %}
+
+
       <button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
       
     </form>

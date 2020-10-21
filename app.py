@@ -1,6 +1,7 @@
 # SE Project Email program Willam Giddens, Trey O'neal, Joe Howard, Chad Whitney
 import creds
 import os
+from os.path import join, dirname, realpath
 import tempfile
 from flask import Flask, abort, render_template, url_for, flash, redirect, request, session, g, send_file
 import mysql.connector
@@ -9,6 +10,15 @@ from forms import LoginForm, Search, ComposeEmail, ForwardEmail
 from nylas import APIClient
 from flask_wtf.csrf import CSRFProtect
 from flask_bcrypt import Bcrypt
+from flask_uploads import configure_uploads, UploadSet, IMAGES
+from werkzeug.datastructures import FileStorage
+from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired
+from werkzeug.utils import secure_filename
+
+
+root = os.path.abspath(os.curdir)
+
 
 # configures nylas credentials
 nylas = APIClient(creds.CLIENT_ID, creds.CLIENT_SECRET, creds.ACCESS_TOKEN)
@@ -17,8 +27,14 @@ nylas = APIClient(creds.CLIENT_ID, creds.CLIENT_SECRET, creds.ACCESS_TOKEN)
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ourseecretkeyz1112'
 app.config['WTF_CSRF_SECRET_KEY'] = 'ourseecretkeyz1112'
+app.config['UPLOADED_PHOTOS_DEST'] = 'uploads'
+
+
+images = UploadSet('photos', ('png','jpg', 'jpeg', 'txt', 'csv', 'gif'))
+configure_uploads(app, images)
 csrf = CSRFProtect(app)
 bcrypt = Bcrypt(app)
+
 
 
 class User:
@@ -192,7 +208,7 @@ def download(id):
 
     # Replace {id} with the appropriate file id
     file = nylas.files.get(id)
-    root = os.path.abspath(os.curdir)
+    # root = os.path.abspath(os.curdir)
     filename = root + '/static/download/' + file['filename']
     temp = open(filename, 'w+b')
     temp.write(file.download())
@@ -208,26 +224,22 @@ def compose():
     
     form = ComposeEmail()
     if request.method == 'POST':
-
-        if form.is_submitted():
-            print("submitted")
-
-        if form.validate():
-            print("valid")
-
-#        print(form.errors)
-
+        data = form.data
         if form.validate_on_submit():
-
-            # attachment = open(data['file'], 'r')
-            # file = nylas.files.create()
-
+            filen = images.save(form.fileName.data)
+            with open (('./uploads/' + filen), 'rb') as f:
+                attachment = f.read() 
+            file = nylas.files.create()
+            file.filename = filen
+            file.stream = attachment
+            file.save()
+            
+            
             draft = nylas.drafts.create()
-            data = form.data
             draft.subject = data['subject']
             draft.to = [{'email': data['to']}]
             draft.body = data['body']
-            # draft.attach(file)
+            draft.attach(file)
             draft.send()
             flash('Email Sent', 'success')
 
@@ -244,32 +256,20 @@ def forward():
 
     if request.method == 'POST':
 
-# #         if form.is_submitted():
-# #             print("submitted")
-
-# #         if form.validate():
-# #             print("valid")
-
-# # #        print(form.errors)
-
-#         if form.validate_on_submit():
-
-        # attachment = open(data['file'], 'r')
-        # file = nylas.files.create()
+        print((request.form['file']))
 
         draft = nylas.drafts.create()
-        # data =form.data
+        data = form.data
         draft.subject = request.form['subject']
         draft.to = [{'email': request.form['to']}]
         draft.body = request.form['body']
-        # draft.attach(file)
+        draft.attach(request.form['file'])
         draft.send()
         flash('Email Sent', 'success')
 
-        # else:
-        #     return render_template("compose.html", form=form)
 
     message = nylas.messages.get(fid)
+    # print(message)
     return render_template("forward.html", data=message, form=form)
 
 
