@@ -256,14 +256,20 @@ def forward():
 
     if request.method == 'POST':
 
-        print((request.form['file']))
-
+        
+        
         draft = nylas.drafts.create()
         data = form.data
         draft.subject = request.form['subject']
         draft.to = [{'email': request.form['to']}]
         draft.body = request.form['body']
-        draft.attach(request.form['file'])
+        try:
+            if (request.form['file']):
+                file = nylas.files.get(request.form['file'])
+                draft.attach(file)
+        except:
+            print("No File Attachment")
+        
         draft.send()
         flash('Email Sent', 'success')
 

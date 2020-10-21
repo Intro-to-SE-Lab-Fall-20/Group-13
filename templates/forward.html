@@ -13,6 +13,7 @@
     
 
     <div class="card">
+      <h2><a href="/email/">Return to Inbox</a></h2>
         <div class="card-body">
     <form  method="POST" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -35,12 +36,13 @@
       <br>
       
       {% for file in data.files %}
-
-      {{ file }}
-
+      
       <label for="attachment">Attachment</label>
-      <textarea rows="5" cols="150" id="file" name="file" class="form-control input-lg" value= "{{ file.id }}" autofocus>{{ file.filename }}</textarea>
+      <input type="hidden" id="file" name="file" class="form-control input-lg" value= "{{ file.id }}" autofocus>{{ file.id }}
+      
       <br>
+
+      {{ file.name }}
       {% endfor %}
 
 
