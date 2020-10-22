@@ -255,9 +255,6 @@ def forward():
         fid = request.args.get('fid')
 
     if request.method == 'POST':
-
-        
-        
         draft = nylas.drafts.create()
         data = form.data
         draft.subject = request.form['subject']
