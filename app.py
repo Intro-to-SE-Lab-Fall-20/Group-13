@@ -16,7 +16,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
 from werkzeug.utils import secure_filename
 
-
+# creates root path
 root = os.path.abspath(os.curdir)
 
 
@@ -29,7 +29,7 @@ app.config['SECRET_KEY'] = 'ourseecretkeyz1112'
 app.config['WTF_CSRF_SECRET_KEY'] = 'ourseecretkeyz1112'
 app.config['UPLOADED_PHOTOS_DEST'] = 'uploads'
 
-
+# handles the file storage information and app variables
 images = UploadSet('photos', ('png','jpg', 'jpeg', 'txt', 'csv', 'gif'))
 configure_uploads(app, images)
 csrf = CSRFProtect(app)
@@ -67,23 +67,15 @@ def isUserValid(email, candidate):
     connection = mysql.connector.connect(**config)
     cursor = connection.cursor()
     query = ("SELECT * FROM user WHERE id =" + str(id))
-    print("in is valid.")
-
     cursor.execute(query)
-
     for item in cursor:
-
         temphash = item[2]
-
     cursor.close()
     connection.close()
-
     return (bcrypt.check_password_hash(temphash, candidate), id)
 
 # TEST
 # getUserId takes in an email address and returns a valid id or a -1 if email not found
-
-
 def getUserId(email_address):
     config = {
         'user': creds.sql_username,
@@ -136,8 +128,6 @@ def login():
     return render_template('default1.html', title='Login', form=form)
 
 # This route shows succesful login
-
-
 @app.route('/success')
 def default1():
     return render_template('default1.html')
@@ -154,7 +144,6 @@ def logout():
 
 
 # This route shows current emails
-
 @app.route("/email/", methods=['GET', 'POST'])
 def email():
     
@@ -166,83 +155,60 @@ def email():
         return render_template("email.html", form=form, data=data)
     else:
         data = nylas.messages.where(in_="inbox")
-        # print(data)
     return render_template("email.html", form=form, data=data)
 
 # This route searches emails and returns emails found
-
-
 @app.route("/email-search/", methods=['GET', 'POST'])
 def emailsearch():
-    # # class Search():
-    # query = StringField('query')
-    # submit = SubmitField('Search')
-
     form = Search()
-
-
     data = Search(form.query.data)
-
     return render_template("emails.html", data=data)
 
 
 # This route shows individual emails
-
-
 @app.route("/emails/<id>", methods=['GET', 'POST'])
 def emails(id):
-
-    
-
     data = nylas.messages.get(id)
-
     if not data.files:
         data.files = "none"
-
     return render_template("emails.html", data=data)
 
-
+# ROute for downloading attachment
 @app.route("/download/<id>", methods=['GET'])
 def download(id):
-
-
-    # Replace {id} with the appropriate file id
     file = nylas.files.get(id)
-    # root = os.path.abspath(os.curdir)
     filename = root + '/static/download/' + file['filename']
     temp = open(filename, 'w+b')
     temp.write(file.download())
     temp.close()
-
     return send_file(filename, as_attachment=True, attachment_filename=file['filename'], mimetype=file['content_type'])
 
 
 # Sets the route for composing a new email
 @app.route("/compose/", methods=['GET', 'POST'])
 def compose():
-
-    
     form = ComposeEmail()
     if request.method == 'POST':
         data = form.data
+        draft = nylas.drafts.create()
         if form.validate_on_submit():
-            filen = images.save(form.fileName.data)
-            with open (('./uploads/' + filen), 'rb') as f:
-                attachment = f.read() 
-            file = nylas.files.create()
-            file.filename = filen
-            file.stream = attachment
-            file.save()
-            
-            
-            draft = nylas.drafts.create()
+            if form.fileName.data:
+                try:
+                    filen = images.save(form.fileName.data)
+                    file = nylas.files.create()
+                    file.filename = filen
+                    with open (('./uploads/' + filen), 'rb') as f:
+                        attachment = f.read() 
+                    file.stream = attachment
+                    file.save()
+                    draft.attach(file)
+                except:
+                   flash('File type not allowed, has been stripped from email', 'danger')    
             draft.subject = data['subject']
             draft.to = [{'email': data['to']}]
             draft.body = data['body']
-            draft.attach(file)
             draft.send()
             flash('Email Sent', 'success')
-
         else:
             return render_template("compose.html", form=form)
     return render_template("compose.html", form=form)
@@ -266,16 +232,12 @@ def forward():
                 draft.attach(file)
         except:
             print("No File Attachment")
-        
         draft.send()
         flash('Email Sent', 'success')
-
-
     message = nylas.messages.get(fid)
-    # print(message)
     return render_template("forward.html", data=message, form=form)
 
-
+# Handles session checking of requests
 @app.before_request
 def before_request():
 
