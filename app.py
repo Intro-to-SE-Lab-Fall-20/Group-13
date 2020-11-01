@@ -242,22 +242,7 @@ def forward():
 @app.route("/notes/", methods=['GET', 'POST'])
 def notes():
     print(session['id'])
-    config = {
-        'user': creds.sql_username,
-        'password': creds.sql_password,
-        'host': creds.sql_host,
-        'port': creds.sql_port,
-        'database': creds.sql_database
-    }
-    connection = mysql.connector.connect(**config)
-    cursor = connection.cursor()
-    query = ("SELECT * FROM notes WHERE idse_users =" + str(session['id']))
-    cursor.execute(query)
-    data = cursor.fetchall()
-    #for going thru notes
-    #tempnotes = cursor
-    cursor.close()
-    connection.close()
+    
     
     form = Notes()
     if request.method == 'POST':
@@ -276,13 +261,27 @@ def notes():
         query = "INSERT INTO notes (note, idse_users) VALUES (%s,%s)"
         val = (data['note'], str(session['id']))
         cursor.execute(query,val)
-        mysql.connector.commit()
+        connection.commit()
         cursor.close()
         connection.close()
-        
-    else:
-        return render_template("notes.html", form=form, data = data)
-    return render_template("notes.html", form=form, data=data)
+    
+    config = {
+        'user': creds.sql_username,
+        'password': creds.sql_password,
+        'host': creds.sql_host,
+        'port': creds.sql_port,
+        'database': creds.sql_database
+    }
+    connection = mysql.connector.connect(**config)
+    cursor = connection.cursor()
+    query = ("SELECT * FROM notes WHERE idse_users =" + str(session['id']) + " ORDER BY note_timestamp DESC ")
+    cursor.execute(query)
+    datanotes = cursor.fetchall()
+    #for going thru notes
+    #tempnotes = cursor
+    cursor.close()
+    connection.close()
+    return render_template("notes.html", form=form, data=datanotes)
 
 
 
