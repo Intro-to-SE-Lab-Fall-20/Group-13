@@ -31,3 +31,8 @@ class ForwardEmail(FlaskForm):
     body = TextAreaField('Body')
     file = FileField('file')
     submit = SubmitField('Send')
+
+class Notes(FlaskForm)
+    note = TextAreaField('Note')
+    save = SubmitField('Save')
+    
