@@ -32,7 +32,7 @@ class ForwardEmail(FlaskForm):
     file = FileField('file')
     submit = SubmitField('Send')
 
-class Notes(FlaskForm)
+class Notes(FlaskForm):
     note = TextAreaField('Note')
     save = SubmitField('Save')
     

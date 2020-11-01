@@ -9,6 +9,17 @@
         autoresize_on_init: false
     });
 </script>
+
+
+<div class="container mb-6">
+    <form method="POST" enctype="multipart/form-data" class="form-check form-check-inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <label for="note" class="sr-only">Note</label>
+        <input type="text" id="note" name="note" class="form-control input-lg"  placeholder="Notes" required
+            autofocus>
+        <button id="save" name="save" class="btn btn-primary btn-block mr-3" type="submit">Save</button>
+    </form>
+
 <div class="container">
     <div class="row">
         <div class="col-sm">
@@ -17,22 +28,17 @@
     </div>
 </div>
 
-
-<div class="content-section">
-    <div class="list-group">
-        <div class="card">
-            <div class="card-body">
-                {% for notes in data %}
-                <p>date: {{ notes.note_timestamp }}</p>
-                <p>note: {{ notes.note }} </p>
-
-                {% endfor %}
-
-
+<div class="container p-5">
+    <div class="content-section">
+        <div class="list-group">
+            {% for notes in data %}
+            <div class="card">
+                <div class="card-body">
+                    <p><strong>date: {{ notes[3] }} </strong> ~ note: {{ notes[1] }} </p>
+                </div>
             </div>
-
+            {% endfor %}
         </div>
     </div>
-
 </div>
 {% endblock content %}

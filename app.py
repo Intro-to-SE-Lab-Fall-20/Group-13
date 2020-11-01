@@ -15,6 +15,7 @@ from werkzeug.datastructures import FileStorage
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
 from werkzeug.utils import secure_filename
+global id
 
 # creates root path
 root = os.path.abspath(os.curdir)
@@ -240,6 +241,7 @@ def forward():
 # Sets the route for adding and reading notes
 @app.route("/notes/", methods=['GET', 'POST'])
 def notes():
+    print(session['id'])
     config = {
         'user': creds.sql_username,
         'password': creds.sql_password,
@@ -249,7 +251,7 @@ def notes():
     }
     connection = mysql.connector.connect(**config)
     cursor = connection.cursor()
-    query = ("SELECT * FROM notes WHERE id =" + session.id)
+    query = ("SELECT * FROM notes WHERE idse_users =" + str(session['id']))
     cursor.execute(query)
     data = cursor.fetchall()
     #for going thru notes
@@ -260,9 +262,26 @@ def notes():
     form = Notes()
     if request.method == 'POST':
         data = form.data
-            flash('Email Sent', 'success')
-        else:
-            return render_template("notes.html", form=form, data = data)
+        print(data)
+        print(data['note'])
+        config = {
+            'user': creds.sql_username,
+            'password': creds.sql_password,
+            'host': creds.sql_host,
+            'port': creds.sql_port,
+            'database': creds.sql_database
+            }
+        connection = mysql.connector.connect(**config)
+        cursor = connection.cursor()
+        query = "INSERT INTO notes (note, idse_users) VALUES (%s,%s)"
+        val = (data['note'], str(session['id']))
+        cursor.execute(query,val)
+        mysql.connector.commit()
+        cursor.close()
+        connection.close()
+        
+    else:
+        return render_template("notes.html", form=form, data = data)
     return render_template("notes.html", form=form, data=data)
 
 
