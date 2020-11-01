@@ -237,16 +237,33 @@ def forward():
     message = nylas.messages.get(fid)
     return render_template("forward.html", data=message, form=form)
 
-# Sets the route for composing a new email
+# Sets the route for adding and reading notes
 @app.route("/notes/", methods=['GET', 'POST'])
 def notes():
+    config = {
+        'user': creds.sql_username,
+        'password': creds.sql_password,
+        'host': creds.sql_host,
+        'port': creds.sql_port,
+        'database': creds.sql_database
+    }
+    connection = mysql.connector.connect(**config)
+    cursor = connection.cursor()
+    query = ("SELECT * FROM notes WHERE id =" + session.id)
+    cursor.execute(query)
+    data = cursor.fetchall()
+    #for going thru notes
+    #tempnotes = cursor
+    cursor.close()
+    connection.close()
+    
     form = Notes()
     if request.method == 'POST':
         data = form.data
             flash('Email Sent', 'success')
         else:
-            return render_template("notes.html", form=form)
-    return render_template("notes.html", form=form)
+            return render_template("notes.html", form=form, data = data)
+    return render_template("notes.html", form=form, data=data)
 
 
 
@@ -256,6 +273,7 @@ def notes():
 def before_request():
 
     if 'id' not in session and request.endpoint != 'login':
+        # add code here to check for counter for login loads
         return redirect(url_for('login'))
 
 

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<script>
+    tinymce.init({
+        selector: 'textarea',
+        plugins: 'noneditable',
+        menubar: false,
+        plugins: 'autoresize',
+        autoresize_on_init: false
+    });
+</script>
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h2><a href="/email/">Return to Inbox</a></h2>
+        </div>
+    </div>
+</div>
+
+
+<div class="content-section">
+    <div class="list-group">
+        <div class="card">
+            <div class="card-body">
+                {% for notes in data %}
+                <p>date: {{ notes.note_timestamp }}</p>
+                <p>note: {{ notes.note }} </p>
+
+                {% endfor %}
+
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
