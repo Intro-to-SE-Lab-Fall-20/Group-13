@@ -6,7 +6,7 @@ import tempfile
 from flask import Flask, abort, render_template, url_for, flash, redirect, request, session, g, send_file
 import mysql.connector
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from forms import LoginForm, Search, ComposeEmail, ForwardEmail
+from forms import LoginForm, Search, ComposeEmail, ForwardEmail, Notes
 from nylas import APIClient
 from flask_wtf.csrf import CSRFProtect
 from flask_bcrypt import Bcrypt
@@ -236,6 +236,20 @@ def forward():
         flash('Email Sent', 'success')
     message = nylas.messages.get(fid)
     return render_template("forward.html", data=message, form=form)
+
+# Sets the route for composing a new email
+@app.route("/notes/", methods=['GET', 'POST'])
+def notes():
+    form = Notes()
+    if request.method == 'POST':
+        data = form.data
+            flash('Email Sent', 'success')
+        else:
+            return render_template("notes.html", form=form)
+    return render_template("notes.html", form=form)
+
+
+
 
 # Handles session checking of requests
 @app.before_request
