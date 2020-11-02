@@ -285,7 +285,7 @@ def profile():
     form = Profile()
     if request.method == 'POST':
         data = form.data
-        flash('Your password has been changed!', 'success')
+        
         config = {
             'user': creds.sql_username,
             'password': creds.sql_password,
@@ -296,16 +296,13 @@ def profile():
         connection = mysql.connector.connect(**config)
         cursor = connection.cursor()
         #working on sql code for updating password.
-        query = "INSERT INTO user (password) VALUES (%s,%s) WHERE id = %s "
-        val = (data['note'], str(session['id']))
+        query = "UPDATE user SET password = %s WHERE id = %s"
+        val = (bcrypt.generate_password_hash(data['password']) , str(session['id']))
         cursor.execute(query,val)
         connection.commit()
         cursor.close()
         connection.close()
-        
-        
-        
-        
+        flash('Your password has been changed!', 'success')
         return redirect(url_for('email'))
     
     
