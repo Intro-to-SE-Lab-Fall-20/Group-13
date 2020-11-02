@@ -1,25 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-<script>
-    tinymce.init({
-        selector: 'textarea',
-        plugins: 'noneditable',
-        menubar: false,
-        plugins: 'autoresize',
-        autoresize_on_init: false
-    });
-</script>
 
 
-<div class="container mb-6">
-    <form method="POST" enctype="multipart/form-data" class="form-check form-check-inline">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-        <label for="note" class="sr-only">Note</label>
-        <input type="text" id="note" name="note" class="form-control input-lg"  placeholder="Notes" required
-            autofocus>
-        <button id="save" name="save" class="btn btn-primary btn-block mr-3" type="submit">Save</button>
-    </form>
 
+<div class="container mb-12">
+    
 <div class="container">
     <div class="row">
         <div class="col-sm">
@@ -29,6 +14,15 @@
 </div>
 
 <div class="container p-5">
+    <form method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <label for="note" class="sr-only">Note</label>
+        <input type="text" id="note" name="note" class="form-control input-lg"  placeholder="Notes" required
+            autofocus><br />
+        <button id="save" name="save" class="btn btn-primary btn-block mr-3" type="submit">Save Your Note</button>
+    </form>
+    <br />
+
     <div class="content-section">
         <div class="list-group">
             {% for notes in data %}

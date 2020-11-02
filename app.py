@@ -277,13 +277,29 @@ def notes():
     query = ("SELECT * FROM notes WHERE idse_users =" + str(session['id']) + " ORDER BY note_timestamp DESC ")
     cursor.execute(query)
     datanotes = cursor.fetchall()
-    #for going thru notes
-    #tempnotes = cursor
     cursor.close()
     connection.close()
     return render_template("notes.html", form=form, data=datanotes)
 
-
+# Sets the route for adding and reading notes
+@app.route("/profile/", methods=['GET', 'POST'])
+def profile():
+    config = {
+        'user': creds.sql_username,
+        'password': creds.sql_password,
+        'host': creds.sql_host,
+        'port': creds.sql_port,
+        'database': creds.sql_database
+    }
+    connection = mysql.connector.connect(**config)
+    cursor = connection.cursor()
+    query = ("SELECT * FROM users WHERE id =" + str(session['id']))
+    cursor.execute(query)
+    datanotes = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    
+    
 
 
 # Handles session checking of requests
