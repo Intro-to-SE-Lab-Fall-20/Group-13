@@ -35,4 +35,9 @@ class ForwardEmail(FlaskForm):
 class Notes(FlaskForm):
     note = TextAreaField('Note')
     save = SubmitField('Save')
+
+class Profile(FlaskForm):
+    password = PasswordField('password')
+    save = SubmitField('Save')
+        
     

@@ -6,7 +6,7 @@ import tempfile
 from flask import Flask, abort, render_template, url_for, flash, redirect, request, session, g, send_file
 import mysql.connector
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from forms import LoginForm, Search, ComposeEmail, ForwardEmail, Notes
+from forms import LoginForm, Search, ComposeEmail, ForwardEmail, Notes, Profile
 from nylas import APIClient
 from flask_wtf.csrf import CSRFProtect
 from flask_bcrypt import Bcrypt
@@ -247,8 +247,6 @@ def notes():
     form = Notes()
     if request.method == 'POST':
         data = form.data
-        print(data)
-        print(data['note'])
         config = {
             'user': creds.sql_username,
             'password': creds.sql_password,
@@ -281,9 +279,37 @@ def notes():
     connection.close()
     return render_template("notes.html", form=form, data=datanotes)
 
-# Sets the route for adding and reading notes
+# Sets the route for updating password
 @app.route("/profile/", methods=['GET', 'POST'])
 def profile():
+    form = Profile()
+    if request.method == 'POST':
+        data = form.data
+        flash('Your password has been changed!', 'success')
+        config = {
+            'user': creds.sql_username,
+            'password': creds.sql_password,
+            'host': creds.sql_host,
+            'port': creds.sql_port,
+            'database': creds.sql_database
+            }
+        connection = mysql.connector.connect(**config)
+        cursor = connection.cursor()
+        #working on sql code for updating password.
+        query = "INSERT INTO user (password) VALUES (%s,%s) WHERE id = %s "
+        val = (data['note'], str(session['id']))
+        cursor.execute(query,val)
+        connection.commit()
+        cursor.close()
+        connection.close()
+        
+        
+        
+        
+        return redirect(url_for('email'))
+    
+    
+    
     config = {
         'user': creds.sql_username,
         'password': creds.sql_password,
@@ -293,12 +319,14 @@ def profile():
     }
     connection = mysql.connector.connect(**config)
     cursor = connection.cursor()
-    query = ("SELECT * FROM users WHERE id =" + str(session['id']))
+    query = ("SELECT * FROM user WHERE id =" + str(session['id']))
     cursor.execute(query)
-    datanotes = cursor.fetchall()
+    datauser = cursor.fetchall()
     cursor.close()
     connection.close()
     
+    
+    return render_template("profile.html", form=form, data=datauser)
     
 
 
