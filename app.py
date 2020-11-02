@@ -123,6 +123,7 @@ def login():
 
             else:
                 session['id'] = validate[1]
+                session.pop('lockcount',None)
                 flash('You have Been Logged In!', 'success')
                 return redirect(url_for('email'))
 
@@ -302,8 +303,9 @@ def profile():
         connection.commit()
         cursor.close()
         connection.close()
+        session.pop('id', None)
         flash('Your password has been changed!', 'success')
-        return redirect(url_for('email'))
+        return redirect(url_for('login'))
     
     
     
@@ -330,7 +332,13 @@ def profile():
 # Handles session checking of requests
 @app.before_request
 def before_request():
-
+    if 'lockcount' not in session:
+        session['lockcount'] = 0
+        print("added session lockcount")
+    if session['lockcount'] > 20:
+            return render_template("failed.html")
+    if 'id' not in session:
+        session['lockcount'] += 1    
     if 'id' not in session and request.endpoint != 'login':
         # add code here to check for counter for login loads
         return redirect(url_for('login'))
