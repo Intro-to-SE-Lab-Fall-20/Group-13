@@ -1,8 +1,18 @@
 language: python
+
 python:
-  - "2.7"
-cache: pip
+  - "3.6"
+
+before_install:
+    - python --version
+    - docker build -t seflask
+    - pip install -U pip
+    - pip install -U pytest
+
 install:
-  - pip install -r requirements.txt
+    - pip install flask
+    - pip install -r requirements.txt
+
 script:
-  - python tests.py
+    - docker run -d -p 127.0.0.1:5000:5000 seflask sh -c "python app.py && flake8"
+    #- pytest
