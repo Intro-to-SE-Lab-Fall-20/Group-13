@@ -112,6 +112,7 @@ def default():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    session.pop('eid', None)
     session.pop('id', None)
     if request.method == 'POST':
 
@@ -123,6 +124,29 @@ def login():
 
             else:
                 session['id'] = validate[1]
+                session.pop('lockcount',None)
+                flash('You have Been Logged In!', 'success')
+                return redirect(url_for('notes'))
+
+    return render_template('default1.html', title='Login', form=form)
+
+
+# This is the email login route
+
+@app.route('/email-login', methods=['GET', 'POST'])
+def emaillogin():
+    form = LoginForm()
+    session.pop('eid', None)
+    if request.method == 'POST':
+
+        if form.validate_on_submit():
+            validate = isUserValid(form.email.data, form.password.data)
+            if validate[0] == False:
+                flash(
+                    'Login Failed, Please Check Your Credentials and Try Again', 'danger')
+
+            else:
+                session['eid'] = validate[1]
                 session.pop('lockcount',None)
                 flash('You have Been Logged In!', 'success')
                 return redirect(url_for('email'))
@@ -138,7 +162,7 @@ def default1():
 # sets the logout route
 @app.route('/logout')
 def logout():
-
+    session.pop('eid', None)
     session.pop('id', None)
     session.pop('csrf_token', None)
     flash('You have Been Logged Out!', 'success')
@@ -148,7 +172,8 @@ def logout():
 # This route shows current emails
 @app.route("/email/", methods=['GET', 'POST'])
 def email():
-    
+    if 'eid' not in session:
+        return redirect(url_for('emaillogin'))
    
     form = Search()
     if 'query' in request.args:
@@ -170,6 +195,8 @@ def emailsearch():
 # This route shows individual emails
 @app.route("/emails/<id>", methods=['GET', 'POST'])
 def emails(id):
+    if 'eid' not in session:
+        return redirect(url_for('emaillogin'))
     data = nylas.messages.get(id)
     if not data.files:
         data.files = "none"
@@ -178,6 +205,8 @@ def emails(id):
 # ROute for downloading attachment
 @app.route("/download/<id>", methods=['GET'])
 def download(id):
+    if 'eid' not in session:
+        return redirect(url_for('emaillogin'))
     file = nylas.files.get(id)
     filename = root + '/static/download/' + file['filename']
     temp = open(filename, 'w+b')
@@ -189,6 +218,8 @@ def download(id):
 # Sets the route for composing a new email
 @app.route("/compose/", methods=['GET', 'POST'])
 def compose():
+    if 'eid' not in session:
+        return redirect(url_for('emaillogin'))
     form = ComposeEmail()
     if request.method == 'POST':
         data = form.data
@@ -218,6 +249,8 @@ def compose():
 
 @app.route("/forward/", methods=['GET', 'POST'])
 def forward():
+    if 'eid' not in session:
+        return redirect(url_for('emaillogin'))    
     form = ForwardEmail
     if 'fid' in request.args:
         fid = request.args.get('fid')
@@ -243,6 +276,7 @@ def forward():
 @app.route("/notes/", methods=['GET', 'POST'])
 def notes():
     print(session['id'])
+    session.pop('eid', None)
     
     
     form = Notes()
