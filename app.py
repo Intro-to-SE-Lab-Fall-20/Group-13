@@ -335,7 +335,7 @@ def before_request():
     if 'lockcount' not in session:
         session['lockcount'] = 0
         print("added session lockcount")
-    if session['lockcount'] > 21:
+    if session['lockcount'] > 20:
             return render_template("failed.html")
     if 'id' not in session:
         session['lockcount'] += 1    
