@@ -9,6 +9,7 @@ class FlaskTestCase(unittest.TestCase):
         tester = app.test_client(self)
         response = tester.get('/login', content_type='html/text')
         self.assertEqual(response.status_code, 200)
+        assert isUserValid("test@test.com","hello") == (True,3)
     
     if __name__ == '__main__':
         unittest.main()
