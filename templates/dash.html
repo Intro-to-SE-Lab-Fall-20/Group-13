@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+
+<div class="container mb-12">
+    
+<div class="container">
+    <div class="row">
+       
+    </div>
+</div>
+
+<div class="container p-5">
+    <form method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <label for="note" class="sr-only">Note</label>
+        <input type="text" id="note" name="note" class="form-control input-lg"  placeholder="Notes" required
+            autofocus><br />
+        <button id="save" name="save" class="btn btn-primary btn-block mr-3" type="submit">Save Your Note</button>
+    </form>
+    <br />
+
+    <div class="content-section">
+        <div class="list-group">        </div>
+    </div>
+</div>
+{% endblock content %}

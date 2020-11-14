@@ -151,7 +151,7 @@ def emaillogin():
                 flash('You have Been Logged In!', 'success')
                 return redirect(url_for('email'))
 
-    return render_template('default1.html', title='Login', form=form)
+    return render_template('email-login.html', title='Login', form=form)
 
 # This route shows succesful login
 @app.route('/success')
